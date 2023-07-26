@@ -12,7 +12,7 @@ function App() {
   const [description, setDescription] = useState('')
 
   useEffect(()=>{
-    axios.get('http://localhost:3000/api/tasks')
+    axios.get('https://todo-api-flh1.onrender.com/api/tasks')
         .then((res)=>setTasks(res.data))
         .catch((err)=>console.log(err.message))
   },[])
@@ -20,13 +20,13 @@ function App() {
   function handleAdd(description){
 
     if(isUpdating){
-      axios.post('http://localhost:3000/api/tasks/' + update_id, {description:description})
+      axios.post('https://todo-api-flh1.onrender.com/api/tasks/' + update_id, {description:description})
         .then(()=>setTasks(tasks.map( task => task._id==update_id? {_id:update_id, description:description}: task)))
         .catch((err)=>console.log(err.message))
       setIsUpdating(false)  
     }
     else{
-      axios.post('http://localhost:3000/api/tasks', {description:description})
+      axios.post('https://todo-api-flh1.onrender.com/api/tasks', {description:description})
       .then((res)=>setTasks([...tasks, {_id:res.data._id, description:res.data.description}]))
       .catch((err)=>console.log(err.message))
     }
@@ -41,18 +41,13 @@ function App() {
   }
 
   function handleDelete(_id){
-    axios.delete('http://localhost:3000/api/tasks/'+_id)
+    axios.delete('https://todo-api-flh1.onrender.com/api/tasks/'+_id)
       .then(()=>setTasks(tasks.filter(task => task._id!=_id)))
-  }
-
-  function handleReset(){
-    setReset(!reset);
   }
   
   return <>
     <TaskForm description={description} setDescription={setDescription} btnText={isUpdating?'Update':'Submit'} onClick={handleAdd}/>
     <TaskList tasks={tasks} onDelete={handleDelete} onUpdate={handleUpdate}/>
-    <button className="btn btn-primary" onClick={handleReset}>reset</button>
   </>
 }
 
